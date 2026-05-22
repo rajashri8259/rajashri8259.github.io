@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rajashri Gaikwad | AI/ML Engineer</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --green:#00ffaa;--green-dim:#00cc77;--green-dark:#003322;
+  --cyan:#00e5ff;--cyan-dim:#0099bb;
+  --bg:#020c08;--bg2:#040f0a;--bg3:#061208;
+  --text:#b8ecd0;--text-dim:#4a7a5e;
+  --border:#082a14;--border-bright:#0d4020;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Exo 2',sans-serif;overflow-x:hidden;cursor:none;}
+#cur{position:fixed;width:6px;height:6px;background:var(--green);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);}
+#cur-ring{position:fixed;width:28px;height:28px;border:1px solid var(--green);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.12s ease;opacity:0.5;}
+#bg-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+body::before{content:'';position:fixed;top:0;left:0;width:100%;height:100%;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,255,170,0.01) 3px,rgba(0,255,170,0.01) 4px);z-index:1;pointer-events:none;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(2,12,8,0.95);border-bottom:1px solid var(--border-bright);backdrop-filter:blur(14px);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;}
+.nav-logo{font-family:'Orbitron',monospace;font-size:1.1rem;font-weight:900;color:var(--green);letter-spacing:0.3em;flex-shrink:0;}
+.nav-links{display:flex!important;flex-direction:row!important;gap:0;list-style:none;flex-wrap:nowrap;overflow-x:auto;}
+.nav-links a{font-family:'Share Tech Mono',monospace;font-size:0.62rem;color:var(--text-dim);text-decoration:none;letter-spacing:0.08em;text-transform:uppercase;padding:0.35rem 0.55rem;transition:color 0.2s;position:relative;white-space:nowrap;}
+.nav-links a:hover,.nav-links a.active{color:var(--green);}
+.nav-links a.active::after{content:'';position:absolute;bottom:-1px;left:0.55rem;right:0.55rem;height:1px;background:var(--green);}
+#nav-toggle{display:none!important;}
+
+/* SECTIONS */
+section{position:relative;z-index:2;padding:100px 5rem 70px;}
+@media(max-width:900px){section{padding:80px 1.5rem 50px;}}
+
+/* SECTION HEADER */
+.sec-tag{font-family:'Share Tech Mono',monospace;font-size:0.67rem;color:var(--cyan);letter-spacing:0.4em;text-transform:uppercase;margin-bottom:0.4rem;}
+.sec-tag::before{content:'// ';}
+.sec-title{font-family:'Orbitron',monospace;font-size:clamp(1.8rem,4vw,2.7rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:0.8rem;}
+.sec-line{width:50px;height:2px;background:var(--green);position:relative;margin-bottom:3rem;}
+.sec-line::after{content:'';position:absolute;right:-18px;top:-4px;width:9px;height:9px;border:2px solid var(--green);transform:rotate(45deg);}
+
+/* HERO */
+#home{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding-top:80px;}
+.hero-eyebrow{font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--cyan);letter-spacing:0.3em;margin-bottom:1.2rem;opacity:0;animation:fadeUp 0.7s 0.2s forwards;}
+.hero-name{font-family:'Orbitron',monospace;font-size:clamp(2.8rem,7vw,5.5rem);font-weight:900;line-height:1;color:#fff;opacity:0;animation:fadeUp 0.7s 0.4s forwards;}
+.hero-name .glitch{position:relative;display:inline-block;}
+.hero-name .glitch::before,.hero-name .glitch::after{content:attr(data-text);position:absolute;top:0;left:0;}
+.hero-name .glitch::before{color:var(--cyan);clip-path:polygon(0 0,100% 0,100% 38%,0 38%);animation:gl1 4s infinite;}
+.hero-name .glitch::after{color:var(--green);clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%);animation:gl2 4s infinite;}
+@keyframes gl1{0%,89%,100%{transform:translate(0);}90%{transform:translate(-3px,1px);}93%{transform:translate(3px,-1px);}96%{transform:translate(-2px,2px);}}
+@keyframes gl2{0%,87%,100%{transform:translate(0);}88%{transform:translate(3px,1px);}91%{transform:translate(-3px,-1px);}94%{transform:translate(2px,-2px);}}
+.hero-role{font-family:'Share Tech Mono',monospace;font-size:clamp(0.8rem,1.8vw,1rem);color:var(--green);margin-top:1.2rem;opacity:0;animation:fadeUp 0.7s 0.6s forwards;min-height:1.5em;}
+.hero-role .blink{display:inline-block;width:2px;height:0.9em;background:var(--green);margin-left:3px;vertical-align:middle;animation:blink 1s infinite;}
+.hero-desc{max-width:600px;margin:1.5rem auto 0;font-size:0.95rem;color:var(--text-dim);line-height:1.85;opacity:0;animation:fadeUp 0.7s 0.8s forwards;}
+.hero-btns{display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 1s forwards;justify-content:center;}
+.btn{font-family:'Share Tech Mono',monospace;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;padding:0.72rem 1.5rem;text-decoration:none;border:1px solid var(--green);color:var(--green);background:transparent;cursor:none;transition:all 0.3s;position:relative;overflow:hidden;display:inline-block;}
+.btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--green);transition:left 0.3s;z-index:-1;}
+.btn:hover{color:var(--bg);}
+.btn:hover::before{left:0;}
+.btn-cyan{border-color:var(--cyan);color:var(--cyan);}
+.btn-cyan::before{background:var(--cyan);}
+.btn-dim{border-color:var(--text-dim);color:var(--text-dim);}
+.btn-dim::before{background:var(--text-dim);}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3.5rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 1.2s forwards;justify-content:center;}
+.stat{border-left:2px solid var(--green);padding-left:1rem;}
+.stat-num{font-family:'Orbitron',monospace;font-size:1.7rem;font-weight:700;color:var(--green);}
+.stat-lbl{font-family:'Share Tech Mono',monospace;font-size:0.58rem;color:var(--text-dim);letter-spacing:0.2em;text-transform:uppercase;margin-top:0.15rem;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* ABOUT */
+#about{background:var(--bg2);}
+.about-grid{display:grid;grid-template-columns:1.1fr 0.9fr;gap:4rem;align-items:start;}
+@media(max-width:768px){.about-grid{grid-template-columns:1fr;gap:2rem;}}
+.about-text p{color:var(--text-dim);line-height:1.95;font-size:0.93rem;margin-bottom:1.1rem;}
+.about-text p strong{color:var(--cyan);font-weight:600;}
+.about-card{border:1px solid var(--border-bright);padding:1.8rem;background:rgba(0,255,170,0.02);position:relative;}
+.about-card::before{content:'';position:absolute;top:-1px;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.about-card::after{content:'';position:absolute;bottom:-1px;left:16px;right:16px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.info-row{display:flex;align-items:flex-start;gap:1rem;padding:0.7rem 0;border-bottom:1px solid var(--border);}
+.info-row:last-child{border-bottom:none;}
+.info-lbl{font-family:'Share Tech Mono',monospace;font-size:0.63rem;color:var(--green);letter-spacing:0.1em;width:86px;flex-shrink:0;padding-top:2px;}
+.info-val{color:var(--text);font-size:0.87rem;}
+.info-val a{color:var(--cyan);text-decoration:none;}
+
+/* SKILLS */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(265px,1fr));gap:1.2rem;}
+.skill-cat{border:1px solid var(--border-bright);padding:1.4rem;background:rgba(0,255,170,0.015);transition:border-color 0.3s,transform 0.3s;position:relative;overflow:hidden;}
+.skill-cat:hover{border-color:var(--green);transform:translateY(-3px);}
+.skill-cat::before{content:'';position:absolute;top:0;left:0;width:2px;height:0;background:var(--green);transition:height 0.4s;}
+.skill-cat:hover::before{height:100%;}
+.cat-title{font-family:'Orbitron',monospace;font-size:0.66rem;font-weight:700;color:var(--cyan);letter-spacing:0.18em;text-transform:uppercase;margin-bottom:1rem;display:flex;align-items:center;gap:0.5rem;}
+.cat-title::before{content:'◆';font-size:0.45rem;color:var(--green);}
+.skill-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.skill-tag{font-family:'Share Tech Mono',monospace;font-size:0.64rem;padding:0.26rem 0.62rem;border:1px solid var(--border-bright);color:var(--text-dim);transition:all 0.2s;background:rgba(0,255,170,0.02);}
+.skill-tag:hover{border-color:var(--green);color:var(--green);background:rgba(0,255,170,0.07);}
+
+/* PROJECTS */
+#projects{background:var(--bg2);}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.8rem;}
+.proj-card{border:1px solid var(--border-bright);padding:1.8rem;background:rgba(0,255,170,0.015);position:relative;overflow:hidden;transition:all 0.35s;}
+.proj-card:hover{border-color:var(--green);transform:translateY(-5px);}
+.proj-card::after{content:'';position:absolute;bottom:0;left:0;width:0;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan));transition:width 0.4s;}
+.proj-card:hover::after{width:100%;}
+.proj-num{font-family:'Orbitron',monospace;font-size:2.2rem;font-weight:900;color:rgba(0,255,170,0.07);position:absolute;top:1rem;right:1.2rem;line-height:1;}
+.proj-title{font-family:'Orbitron',monospace;font-size:0.88rem;font-weight:700;color:#fff;margin-bottom:0.7rem;}
+.proj-desc{color:var(--text-dim);font-size:0.86rem;line-height:1.75;margin-bottom:1.2rem;}
+.proj-tech{display:flex;flex-wrap:wrap;gap:0.35rem;margin-bottom:1.2rem;}
+.tech-badge{font-family:'Share Tech Mono',monospace;font-size:0.6rem;padding:0.18rem 0.52rem;background:rgba(0,229,255,0.08);color:var(--cyan);border:1px solid rgba(0,229,255,0.2);}
+.proj-status{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--green);display:flex;align-items:center;gap:0.5rem;}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,255,170,0.5);}50%{box-shadow:0 0 0 6px rgba(0,255,170,0);}}
+
+/* RESUME */
+#resume{background:var(--bg3);}
+.resume-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;}
+@media(max-width:768px){.resume-wrap{grid-template-columns:1fr;}}
+.resume-box{border:1px solid var(--border-bright);padding:2.5rem;background:rgba(0,255,170,0.018);text-align:center;position:relative;}
+.resume-box::before{content:'';position:absolute;top:-1px;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.resume-box::after{content:'';position:absolute;bottom:-1px;left:30px;right:30px;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
+.resume-icon{font-size:3.5rem;margin-bottom:1rem;opacity:0.6;}
+.resume-box h3{font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:0.8rem;letter-spacing:0.1em;}
+.resume-box p{color:var(--text-dim);font-size:0.86rem;line-height:1.8;margin-bottom:2rem;}
+.resume-stats{display:flex;flex-direction:column;gap:1rem;}
+.r-stat{border:1px solid var(--border-bright);padding:1rem 1.5rem;display:flex;align-items:center;gap:1rem;}
+.r-stat-num{font-family:'Orbitron',monospace;font-size:1.6rem;font-weight:700;color:var(--green);width:50px;}
+.r-stat-label{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.1em;}
+
+/* CERTIFICATIONS */
+#certifications{background:var(--bg2);}
+.cert-controls{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.cert-count{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.15em;}
+.cert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.2rem;}
+.cert-card{border:1px solid var(--border-bright);padding:1.5rem;background:rgba(0,255,170,0.015);transition:all 0.3s;position:relative;overflow:hidden;cursor:none;}
+.cert-card:hover{border-color:var(--cyan);transform:translateY(-3px);}
+.cert-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--green),var(--cyan));transform:scaleX(0);transition:transform 0.3s;}
+.cert-card:hover::before{transform:scaleX(1);}
+.cert-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.8rem;gap:0.5rem;}
+.cert-issuer-badge{font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.18rem 0.55rem;border:1px solid var(--green);color:var(--green);letter-spacing:0.1em;flex-shrink:0;}
+.cert-elite{font-family:'Share Tech Mono',monospace;font-size:0.55rem;padding:0.15rem 0.5rem;border:1px solid gold;color:gold;letter-spacing:0.1em;}
+.cert-title{font-family:'Exo 2',sans-serif;font-size:0.9rem;color:#fff;font-weight:600;margin-bottom:0.4rem;line-height:1.4;}
+.cert-org{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--cyan);letter-spacing:0.08em;margin-bottom:0.6rem;}
+.cert-meta{display:flex;align-items:center;justify-content:space-between;margin-top:0.8rem;}
+.cert-date{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--text-dim);letter-spacing:0.08em;}
+.cert-score{font-family:'Orbitron',monospace;font-size:0.75rem;font-weight:700;color:var(--green);}
+.cert-view-btn{font-family:'Share Tech Mono',monospace;font-size:0.6rem;color:var(--cyan);background:none;border:1px solid rgba(0,229,255,0.3);padding:0.2rem 0.6rem;cursor:none;transition:all 0.2s;margin-top:0.8rem;display:inline-block;}
+.cert-view-btn:hover{border-color:var(--cyan);background:rgba(0,229,255,0.08);}
+
+/* ADD CERT MODAL */
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(2,12,8,0.92);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{border:1px solid var(--border-bright);padding:2.5rem;background:var(--bg2);max-width:500px;width:90%;position:relative;}
+.modal-box::before{content:'';position:absolute;top:-1px;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);}
+.modal-title{font-family:'Orbitron',monospace;font-size:0.9rem;color:#fff;margin-bottom:1.5rem;letter-spacing:0.1em;}
+.form-group{margin-bottom:1rem;}
+.form-label{font-family:'Share Tech Mono',monospace;font-size:0.63rem;color:var(--cyan);letter-spacing:0.15em;display:block;margin-bottom:0.4rem;}
+.form-input,.form-select{width:100%;background:rgba(0,255,170,0.03);border:1px solid var(--border-bright);color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.85rem;padding:0.6rem 0.8rem;outline:none;transition:border-color 0.2s;}
+.form-input:focus,.form-select:focus{border-color:var(--green);}
+.form-select option{background:var(--bg2);}
+.modal-btns{display:flex;gap:0.8rem;margin-top:1.5rem;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:0.8rem;cursor:none;}
+.modal-close:hover{color:var(--green);}
+
+/* INTERNSHIP */
+#internship{background:var(--bg3);}
+.intern-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;}
+.intern-meta{font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--cyan);letter-spacing:0.1em;}
+.log-wrap{display:flex;gap:2rem;align-items:flex-start;flex-wrap:wrap;}
+.log-sidebar{width:210px;flex-shrink:0;}
+@media(max-width:768px){.log-sidebar{width:100%;}}
+.log-entries{flex:1;min-width:280px;}
+.day-btn{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--text-dim);border:1px solid var(--border-bright);padding:0.5rem 0.8rem;background:transparent;cursor:none;text-align:left;width:100%;margin-bottom:0.4rem;transition:all 0.2s;letter-spacing:0.07em;display:flex;justify-content:space-between;align-items:center;}
+.day-btn:hover,.day-btn.active{border-color:var(--green);color:var(--green);background:rgba(0,255,170,0.04);}
+.day-status-dot{width:5px;height:5px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.log-entry{display:none;border:1px solid var(--border-bright);padding:1.8rem;background:rgba(0,255,170,0.015);}
+.log-entry.active{display:block;}
+.log-date{font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--cyan);letter-spacing:0.2em;margin-bottom:0.4rem;}
+.log-title{font-family:'Orbitron',monospace;font-size:0.88rem;color:#fff;margin-bottom:1rem;}
+.log-body{color:var(--text-dim);font-size:0.87rem;line-height:1.85;white-space:pre-wrap;}
+.log-body ul{padding-left:1.2rem;}
+.log-body ul li::marker{color:var(--green);}
+.log-tag-row{display:flex;flex-wrap:wrap;gap:0.4rem;margin-top:1rem;}
+.log-tag{font-family:'Share Tech Mono',monospace;font-size:0.58rem;padding:0.18rem 0.5rem;border:1px solid rgba(0,229,255,0.2);color:var(--cyan);background:rgba(0,229,255,0.05);}
+.log-del{font-family:'Share Tech Mono',monospace;font-size:0.6rem;border:1px solid rgba(255,80,80,0.3);color:rgba(255,80,80,0.6);padding:0.25rem 0.6rem;background:none;cursor:none;margin-top:1rem;transition:all 0.2s;}
+.log-del:hover{border-color:#ff5050;color:#ff5050;}
+.log-form-box{border:1px solid var(--border-bright);padding:1.5rem;background:rgba(0,255,170,0.01);margin-bottom:1.2rem;display:none;}
+.log-form-box.open{display:block;}
+.form-textarea{width:100%;background:rgba(0,255,170,0.03);border:1px solid var(--border-bright);color:var(--text);font-family:'Exo 2',sans-serif;font-size:0.85rem;padding:0.6rem 0.8rem;outline:none;min-height:110px;resize:vertical;transition:border-color 0.2s;}
+.form-textarea:focus{border-color:var(--green);}
+.log-empty{font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:var(--text-dim);padding:2.5rem;border:1px dashed var(--border-bright);text-align:center;letter-spacing:0.1em;}
+
+/* CONTACT */
+#contact{background:var(--bg2);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:2rem;}}
+.contact-intro{color:var(--text-dim);line-height:1.85;font-size:0.93rem;margin-bottom:2rem;}
+.contact-links{display:flex;flex-direction:column;gap:0.8rem;}
+.c-link{display:flex;align-items:center;gap:1rem;padding:0.9rem 1.2rem;border:1px solid var(--border-bright);color:var(--text-dim);text-decoration:none;font-family:'Share Tech Mono',monospace;font-size:0.7rem;transition:all 0.3s;letter-spacing:0.07em;}
+.c-link:hover{border-color:var(--green);color:var(--green);padding-left:1.8rem;}
+.c-link-wide{padding:1.2rem 2rem;font-size:0.8rem;}
+.contact-links{display:flex;flex-direction:column;gap:0.8rem;}
+.c-icon{width:27px;height:27px;border:1px solid var(--border-bright);display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:var(--green);flex-shrink:0;font-family:'Orbitron',monospace;font-weight:700;}
+.terminal{border:1px solid var(--border-bright);padding:1.8rem;font-family:'Share Tech Mono',monospace;font-size:0.76rem;background:rgba(0,255,170,0.015);}
+.term-bar{display:flex;align-items:center;gap:0.5rem;margin-bottom:1.2rem;padding-bottom:0.8rem;border-bottom:1px solid var(--border);font-size:0.63rem;color:var(--text-dim);letter-spacing:0.15em;}
+.tdot{width:7px;height:7px;border-radius:50%;}
+.tl{color:var(--text-dim);margin-bottom:0.42rem;line-height:1.7;}
+.tl .cmd{color:var(--green);}
+.tl .val{color:#e0fff0;}
+.tl .acc{color:var(--cyan);}
+
+/* FOOTER */
+footer{position:relative;z-index:2;border-top:1px solid var(--border-bright);padding:1.8rem 5rem;display:flex;align-items:center;justify-content:space-between;font-family:'Share Tech Mono',monospace;font-size:0.63rem;color:var(--text-dim);flex-wrap:wrap;gap:1rem;}
+@media(max-width:768px){footer{padding:1.5rem;}}
+
+/* LIGHTBOX */
+.lightbox{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(2,12,8,0.97);z-index:600;align-items:center;justify-content:center;flex-direction:column;gap:1rem;}
+.lightbox.open{display:flex;}
+.lightbox iframe{width:min(90vw,900px);height:min(80vh,650px);border:1px solid var(--border-bright);}
+.lightbox-close{font-family:'Share Tech Mono',monospace;font-size:0.75rem;color:var(--green);background:none;border:1px solid var(--border-bright);padding:0.5rem 1.2rem;cursor:none;letter-spacing:0.15em;}
+.lightbox-title{font-family:'Orbitron',monospace;font-size:0.85rem;color:#fff;letter-spacing:0.1em;}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(35px);transition:opacity 0.7s,transform 0.7s;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* MOBILE NAV */
+/* mobile nav removed - nav always horizontal */
+</style>
+</head>
+<body>
+<canvas id="bg-canvas"></canvas>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-title" id="lb-title"></div>
+  <iframe id="lb-frame" src=""></iframe>
+  <button class="lightbox-close" onclick="closeLightbox()">✕ CLOSE</button>
+</div>
+
+<!-- ADD CERT MODAL -->
+<div class="modal-overlay" id="cert-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCertModal()">✕</button>
+    <div class="modal-title">ADD CERTIFICATE</div>
+    <div class="form-group"><label class="form-label">CERTIFICATE TITLE</label><input type="text" class="form-input" id="cm-title" placeholder="e.g. Introduction to Machine Learning"/></div>
+    <div class="form-group"><label class="form-label">ISSUING ORGANIZATION</label><input type="text" class="form-input" id="cm-org" placeholder="e.g. IBM, NPTEL, Coursera"/></div>
+    <div class="form-group"><label class="form-label">DATE ISSUED</label><input type="text" class="form-input" id="cm-date" placeholder="e.g. March 2025"/></div>
+    <div class="form-group"><label class="form-label">SCORE / GRADE (optional)</label><input type="text" class="form-input" id="cm-score" placeholder="e.g. 96% / Elite"/></div>
+    <div class="form-group"><label class="form-label">CERTIFICATE URL (Google Drive / LinkedIn link)</label><input type="text" class="form-input" id="cm-url" placeholder="https://..."/></div>
+    <div class="form-group"><label class="form-label">BADGE TYPE</label>
+      <select class="form-select" id="cm-badge">
+        <option value="IBM">IBM</option><option value="NPTEL">NPTEL</option>
+        <option value="NPTEL ELITE">NPTEL ELITE</option><option value="COURSERA">COURSERA</option>
+        <option value="GOOGLE">GOOGLE</option><option value="OTHER">OTHER</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn" onclick="saveCert()" style="font-size:0.68rem;padding:0.6rem 1.2rem;">SAVE</button>
+      <button class="btn btn-dim" onclick="closeCertModal()" style="font-size:0.68rem;padding:0.6rem 1.2rem;">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">RG</div>
+  <button id="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">MENU</button>
+  <ul class="nav-links">
+    <li><a href="#home">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#resume">Resume</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#internship">Internship</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="home">
+  <div class="hero-eyebrow">[ CSE (AI/ML) · 2ND YEAR · SANJIVANI INSTITUTE ]</div>
+  <h1 class="hero-name">
+    <span class="glitch" data-text="RAJASHRI">RAJASHRI</span><br/>
+    <span class="glitch" data-text="GAIKWAD">GAIKWAD</span>
+  </h1>
+  <div class="hero-role"><span id="typed"></span><span class="blink"></span></div>
+  <p class="hero-desc">Building at the intersection of intelligence and code. Exploring machine learning, deep learning, NLP and full-stack development — one project at a time. Always learning. Always building.</p>
+  <div class="hero-btns">
+    <a href="#projects" class="btn">View Projects</a>
+    <a href="https://drive.google.com/file/d/1RBTvG4JloJzC87B_jyZsv99PXzRK-3HM/view?usp=drive_link" target="_blank" class="btn btn-cyan">Download Resume</a>
+    <a href="#contact" class="btn btn-dim">Contact Me</a>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">2nd</div><div class="stat-lbl">Year Student</div></div>
+    <div class="stat"><div class="stat-num">6</div><div class="stat-lbl">Certifications</div></div>
+    <div class="stat"><div class="stat-num">10+</div><div class="stat-lbl">Tech Skills</div></div>
+    <div class="stat"><div class="stat-num">96%</div><div class="stat-lbl">NPTEL Elite</div></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="reveal"><div class="sec-tag">Identity Matrix</div><div class="sec-title">About Me</div><div class="sec-line"></div></div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>I am a <strong>2nd year AI & Machine Learning student</strong> passionate about technology, programming, and intelligent systems. I enjoy building projects related to <strong>deep learning, NLP, and machine learning</strong> while continuously improving my technical skills.</p>
+      <p>I have experience with <strong>Python, Java, C++, and R</strong>, along with knowledge of ML tools, deep learning frameworks, and web technologies. Currently diving deeper into <strong>Natural Language Processing, Neural Networks and AI model development</strong>.</p>
+      <p>My philosophy: <strong>learn by building, grow by failing, succeed by iterating.</strong> I believe every line of code is a step toward making intelligent systems that solve real problems.</p>
+    </div>
+    <div class="about-card reveal">
+      <div class="info-row"><span class="info-lbl">NAME</span><span class="info-val">Rajashri Gaikwad</span></div>
+      <div class="info-row"><span class="info-lbl">YEAR</span><span class="info-val">2nd Year — AIML</span></div>
+      <div class="info-row"><span class="info-lbl">BRANCH</span><span class="info-val">CSE (AI & Machine Learning)</span></div>
+      <div class="info-row"><span class="info-lbl">FOCUS</span><span class="info-val">ML · Deep Learning · NLP</span></div>
+      <div class="info-row"><span class="info-lbl">GITHUB</span><span class="info-val"><a href="https://github.com/rajashri8259" target="_blank">github.com/rajashri8259</a></span></div>
+      <div class="info-row"><span class="info-lbl">LINKEDIN</span><span class="info-val"><a href="https://www.linkedin.com/in/rajashri-gaikwad-864b03321/" target="_blank">rajashri-gaikwad</a></span></div>
+      <div class="info-row"><span class="info-lbl">STATUS</span><span class="info-val" style="color:var(--green);">● Open to Opportunities</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="reveal"><div class="sec-tag">Capability Stack</div><div class="sec-title">Skills</div><div class="sec-line"></div></div>
+  <div class="skills-grid">
+    <div class="skill-cat reveal"><div class="cat-title">Programming Languages</div><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">Java</span><span class="skill-tag">C++</span><span class="skill-tag">R Programming</span></div></div>
+    <div class="skill-cat reveal"><div class="cat-title">AI / ML / DL / NLP</div><div class="skill-tags"><span class="skill-tag">Machine Learning</span><span class="skill-tag">Deep Learning</span><span class="skill-tag">NLP</span><span class="skill-tag">Model Training</span><span class="skill-tag">EDA</span><span class="skill-tag">AI Fundamentals</span></div></div>
+    <div class="skill-cat reveal"><div class="cat-title">Libraries & Frameworks</div><div class="skill-tags"><span class="skill-tag">NumPy</span><span class="skill-tag">Pandas</span><span class="skill-tag">Matplotlib</span><span class="skill-tag">Scikit-learn</span><span class="skill-tag">Flask</span></div></div>
+    <div class="skill-cat reveal"><div class="cat-title">Web Development</div><div class="skill-tags"><span class="skill-tag">HTML</span><span class="skill-tag">CSS</span><span class="skill-tag">Basic JavaScript</span></div></div>
+    <div class="skill-cat reveal"><div class="cat-title">Tools & Platforms</div><div class="skill-tags"><span class="skill-tag">Git</span><span class="skill-tag">GitHub</span><span class="skill-tag">VS Code</span><span class="skill-tag">Jupyter Notebook</span><span class="skill-tag">IBM Watson Studio</span><span class="skill-tag">Power BI</span><span class="skill-tag">SPSS</span></div></div>
+    <div class="skill-cat reveal"><div class="cat-title">Concepts & Soft Skills</div><div class="skill-tags"><span class="skill-tag">OOPs</span><span class="skill-tag">DSA</span><span class="skill-tag">DBMS</span><span class="skill-tag">MySQL</span><span class="skill-tag">Problem Solving</span><span class="skill-tag">Teamwork</span><span class="skill-tag">Leadership</span><span class="skill-tag">Quick Learner</span><span class="skill-tag">Creativity</span><span class="skill-tag">Time Management</span></div></div>
+  </div>
+</section>
+
+<!-- ADD PROJECT MODAL -->
+<div class="modal-overlay" id="proj-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeProjModal()">✕</button>
+    <div class="modal-title">ADD NEW PROJECT</div>
+    <div class="form-group"><label class="form-label">PROJECT TITLE</label><input type="text" class="form-input" id="pm-title" placeholder="e.g. Sentiment Analysis App"/></div>
+    <div class="form-group"><label class="form-label">DESCRIPTION</label><textarea class="form-textarea" id="pm-desc" placeholder="What does this project do?"></textarea></div>
+    <div class="form-group"><label class="form-label">TECH USED (comma separated)</label><input type="text" class="form-input" id="pm-tech" placeholder="Python, TensorFlow, Flask"/></div>
+    <div class="form-group"><label class="form-label">GITHUB REPO URL (optional)</label><input type="text" class="form-input" id="pm-url" placeholder="https://github.com/rajashri8259/..."/></div>
+    <div class="form-group"><label class="form-label">STATUS</label>
+      <select class="form-select" id="pm-status">
+        <option value="COMPLETED">COMPLETED</option>
+        <option value="IN PROGRESS">IN PROGRESS</option>
+        <option value="PLANNED">PLANNED</option>
+      </select>
+    </div>
+    <div class="modal-btns">
+      <button class="btn" onclick="saveProject()" style="font-size:0.68rem;padding:0.6rem 1.2rem;">SAVE PROJECT</button>
+      <button class="btn btn-dim" onclick="closeProjModal()" style="font-size:0.68rem;padding:0.6rem 1.2rem;">CANCEL</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="reveal"><div class="sec-tag">Build Log</div><div class="sec-title">Projects</div><div class="sec-line"></div></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem;" class="reveal">
+    <div id="proj-count" style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);letter-spacing:0.15em;"></div>
+    <button class="btn btn-cyan" onclick="openProjModal()" style="font-size:0.65rem;padding:0.55rem 1.1rem;">+ ADD PROJECT</button>
+  </div>
+  <div class="projects-grid" id="proj-grid"></div>
+</section>
+
+<!-- RESUME -->
+<section id="resume">
+  <div class="reveal"><div class="sec-tag">CV Module</div><div class="sec-title">Resume</div><div class="sec-line"></div></div>
+  <div class="resume-wrap reveal">
+    <div class="resume-box">
+      <div class="resume-icon">📄</div>
+      <h3>RAJASHRI GAIKWAD — CV</h3>
+      <p>My full academic background, skills, projects, certifications and experience. Updated regularly as I learn and build more.</p>
+      <a href="https://drive.google.com/file/d/1RBTvG4JloJzC87B_jyZsv99PXzRK-3HM/view?usp=drive_link" target="_blank" class="btn">⬇ Download Resume</a>
+    </div>
+    <div class="resume-stats">
+      <div class="r-stat"><div class="r-stat-num">6</div><div class="r-stat-label">CERTIFICATIONS EARNED</div></div>
+      <div class="r-stat"><div class="r-stat-num">96%</div><div class="r-stat-label">NPTEL ELITE — TOP 2%</div></div>
+      <div class="r-stat"><div class="r-stat-num">4+</div><div class="r-stat-label">IBM COURSES COMPLETED</div></div>
+      <div class="r-stat"><div class="r-stat-num">2yr</div><div class="r-stat-label">AIML ENGINEERING STUDENT</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="reveal"><div class="sec-tag">Credentials</div><div class="sec-title">Certifications</div><div class="sec-line"></div></div>
+  <div class="cert-controls reveal">
+    <div class="cert-count" id="cert-count">6 CERTIFICATES EARNED</div>
+    <button class="btn btn-cyan" onclick="openCertModal()" style="font-size:0.65rem;padding:0.55rem 1.1rem;">+ ADD CERTIFICATE</button>
+  </div>
+  <div class="cert-grid" id="cert-grid"></div>
+</section>
+
+<!-- INTERNSHIP -->
+<section id="internship">
+  <div class="reveal"><div class="sec-tag">Field Log</div><div class="sec-title">Internship Journal</div><div class="sec-line"></div></div>
+  <div class="intern-bar reveal">
+    <div class="intern-meta">SANJIVANI TINKERERS LAB · 2025 · AI/ML INTERNSHIP</div>
+    <button class="btn" onclick="toggleLogForm()" style="font-size:0.65rem;padding:0.5rem 1rem;">+ ADD TODAY'S LOG</button>
+  </div>
+  <div class="log-form-box reveal" id="log-form">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.65rem;color:var(--cyan);letter-spacing:0.15em;margin-bottom:1rem;">// NEW DAILY ENTRY</div>
+    <div class="form-group"><label class="form-label">DATE</label><input type="date" class="form-input" id="f-date"/></div>
+    <div class="form-group"><label class="form-label">DAY TITLE (e.g. "Day 2 — HTML Basics")</label><input type="text" class="form-input" id="f-title" placeholder="Day X — Topic"/></div>
+    <div class="form-group"><label class="form-label">WHAT I LEARNED / DID TODAY</label><textarea class="form-textarea" id="f-content" placeholder="• Learned about...&#10;• Built...&#10;• Explored...&#10;• Key takeaway: ..."></textarea></div>
+    <div class="form-group"><label class="form-label">TAGS (comma separated)</label><input type="text" class="form-input" id="f-tags" placeholder="GitHub, HTML, Python, ML"/></div>
+    <div style="display:flex;gap:0.8rem;margin-top:1rem;">
+      <button class="btn" onclick="saveLog()" style="font-size:0.65rem;padding:0.55rem 1rem;">SAVE ENTRY</button>
+      <button class="btn btn-dim" onclick="toggleLogForm()" style="font-size:0.65rem;padding:0.55rem 1rem;">CANCEL</button>
+    </div>
+  </div>
+  <div class="log-wrap reveal">
+    <div class="log-sidebar" id="log-sidebar"></div>
+    <div class="log-entries" id="log-entries">
+      <div class="log-empty" id="log-empty" style="display:none;">No entries yet. Click "+ ADD TODAY'S LOG" to start!</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="reveal"><div class="sec-tag">Establish Connection</div><div class="sec-title">Contact</div><div class="sec-line"></div></div>
+  <div class="reveal">
+    <p class="contact-intro" style="max-width:600px;">Open to internships, collaborations, and interesting tech conversations. Whether it's a project idea or just a hello — reach out!</p>
+  </div>
+  <div class="contact-links reveal" style="max-width:900px;">
+    <a href="mailto:gaikwadrajashri7@gmail.com" class="c-link c-link-wide"><div class="c-icon">@</div><div><div style="font-size:0.6rem;color:var(--text-dim);letter-spacing:0.15em;margin-bottom:0.2rem;">EMAIL</div>gaikwadrajashri7@gmail.com</div></a>
+    <a href="https://github.com/rajashri8259" target="_blank" class="c-link c-link-wide"><div class="c-icon">GH</div><div><div style="font-size:0.6rem;color:var(--text-dim);letter-spacing:0.15em;margin-bottom:0.2rem;">GITHUB</div>github.com/rajashri8259</div></a>
+    <a href="https://www.linkedin.com/in/rajashri-gaikwad-864b03321/" target="_blank" class="c-link c-link-wide"><div class="c-icon">IN</div><div><div style="font-size:0.6rem;color:var(--text-dim);letter-spacing:0.15em;margin-bottom:0.2rem;">LINKEDIN</div>linkedin.com/in/rajashri-gaikwad-864b03321</div></a>
+  </div>
+</section>
+
+
+
+<script>
+// ── LIVE BACKGROUND ─────────────────────────────────────────
+const canvas=document.getElementById('bg-canvas');
+const ctx=canvas.getContext('2d');
+let W,H,frame=0;
+const particles=[];
+const matChars='01アイMLAIデータ∑∇λ神経';
+let drops=[];
+
+function resize(){
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+  drops=Array.from({length:Math.floor(W/22)},()=>Math.random()*-60);
+}
+resize();
+window.addEventListener('resize',resize);
+
+class P{
+  constructor(){this.reset();}
+  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-0.5)*0.35;this.vy=(Math.random()-0.5)*0.35;this.r=Math.random()*1.5+0.5;this.a=Math.random()*0.45+0.08;this.hex=Math.random()>0.72;}
+  update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset();}
+  draw(){
+    ctx.globalAlpha=this.a;
+    if(this.hex){
+      ctx.strokeStyle='#00e5ff';ctx.lineWidth=0.5;
+      const s=this.r*3.5;
+      ctx.beginPath();
+      for(let i=0;i<6;i++){const a=(Math.PI/3)*i;i===0?ctx.moveTo(this.x+s*Math.cos(a),this.y+s*Math.sin(a)):ctx.lineTo(this.x+s*Math.cos(a),this.y+s*Math.sin(a));}
+      ctx.closePath();ctx.stroke();
+    }else{ctx.fillStyle='#00ffaa';ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();}
+    ctx.globalAlpha=1;
+  }
+}
+for(let i=0;i<90;i++)particles.push(new P());
+
+function drawBg(){
+  ctx.fillStyle='rgba(2,12,8,0.16)';
+  ctx.fillRect(0,0,W,H);
+  // matrix rain
+  ctx.font='13px "Share Tech Mono"';
+  drops.forEach((y,i)=>{
+    if(Math.random()>0.5){
+      const a=Math.random()*0.055+0.008;
+      ctx.fillStyle=`rgba(0,255,170,${a})`;
+      ctx.fillText(matChars[Math.floor(Math.random()*matChars.length)],i*22,y*17);
+    }
+    if(y*17>H&&Math.random()>0.975)drops[i]=0;
+    drops[i]+=0.55;
+  });
+  // particles
+  particles.forEach(p=>{p.update();p.draw();});
+  // connections
+  ctx.lineWidth=0.25;
+  for(let i=0;i<particles.length;i++){
+    for(let j=i+1;j<particles.length;j++){
+      const dx=particles[i].x-particles[j].x,dy=particles[i].y-particles[j].y;
+      const d=Math.sqrt(dx*dx+dy*dy);
+      if(d<110){ctx.globalAlpha=(1-d/110)*0.07;ctx.strokeStyle='#00ffaa';ctx.beginPath();ctx.moveTo(particles[i].x,particles[i].y);ctx.lineTo(particles[j].x,particles[j].y);ctx.stroke();ctx.globalAlpha=1;}
+    }
+  }
+  // scan line
+  frame++;
+  const sy=(frame*0.4)%H;
+  const g=ctx.createLinearGradient(0,sy-50,0,sy+50);
+  g.addColorStop(0,'rgba(0,255,170,0)');g.addColorStop(0.5,'rgba(0,255,170,0.025)');g.addColorStop(1,'rgba(0,255,170,0)');
+  ctx.fillStyle=g;ctx.fillRect(0,sy-50,W,100);
+  requestAnimationFrame(drawBg);
+}
+drawBg();
+
+// ── CURSOR ──────────────────────────────────────────────────
+const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
+document.addEventListener('mousemove',e=>{cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';ring.style.left=e.clientX+'px';ring.style.top=e.clientY+'px';});
+document.querySelectorAll('a,.btn,button,.skill-tag,.proj-card,.cert-card,.day-btn,.c-link').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ring.style.transform='translate(-50%,-50%) scale(1.8)';ring.style.opacity='0.9';});
+  el.addEventListener('mouseleave',()=>{ring.style.transform='translate(-50%,-50%) scale(1)';ring.style.opacity='0.5';});
+});
+
+// ── REVEAL ──────────────────────────────────────────────────
+const obs=new IntersectionObserver(en=>{en.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.07});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+// ── ACTIVE NAV ──────────────────────────────────────────────
+const secs=document.querySelectorAll('section');
+const navAs=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-120)cur=s.id;});
+  navAs.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+});
+
+// ── TYPING ──────────────────────────────────────────────────
+const roles=['Aspiring AI/ML Engineer','Deep Learning Explorer','NLP Enthusiast','Python Developer','Future AI Engineer','ML Student & Builder'];
+let ri=0,ci=0,del=false;
+const typedEl=document.getElementById('typed');
+function type(){
+  const r=roles[ri];
+  typedEl.textContent=del?r.slice(0,--ci):r.slice(0,++ci);
+  if(!del&&ci===r.length){del=true;setTimeout(type,2000);return;}
+  if(del&&ci===0){del=false;ri=(ri+1)%roles.length;}
+  setTimeout(type,del?55:95);
+}
+setTimeout(type,1500);
+
+// ── SMOOTH SCROLL ────────────────────────────────────────────
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href'))?.scrollIntoView({behavior:'smooth'});document.querySelector('.nav-links').classList.remove('open');});
+});
+
+// ── CERTIFICATIONS ───────────────────────────────────────────
+const DEFAULT_CERTS=[
+  {title:'Business Ethics',org:'NPTEL — IIT Kharagpur',date:'Jan–Apr 2026',score:'96% · ELITE · Top 2%',badge:'NPTEL ELITE',url:'https://drive.google.com/file/d/1r7Fz3UIYlSiAShgD_gNG_XAsOGSbQVi-/view?usp=drive_link'},
+  {title:'Predictive Modeling with IBM SPSS Modeler',org:'IBM Career Education Program',date:'May 2026',score:'Completed',badge:'IBM',url:'https://drive.google.com/file/d/1CqsL5ShvkvgV2Ql45uc2gtKXNBNKS1yE/view?usp=drive_link'},
+  {title:'Devops, Agile & Design Thinking',org:'IBM Career Education Program',date:'October 2025',score:'Completed',badge:'IBM',url:'https://drive.google.com/file/d/1MKCCf6oUYwaJWKtDNTADdYfA814grDg5/view?usp=drive_link'},
+  {title:'Data Visualisation',org:'IBM Career Education Program',date:'March 2025',score:'Completed',badge:'IBM',url:'https://drive.google.com/file/d/1i-HgDLaL7_SRaCpj8gxiA8SXjQ08WfsY/view?usp=drive_link'},
+  {title:'Introduction to Python',org:'IBM Career Education Program',date:'November 2024',score:'Completed',badge:'IBM',url:'https://drive.google.com/file/d/19c1pErmV11TACpvUul4GY214CerH1q46/view?usp=drive_link'},
+  {title:'Discrete Mathematics',org:'NPTEL — IIIT Bangalore',date:'Jul–Oct 2025',score:'53%',badge:'NPTEL',url:'https://drive.google.com/file/d/147KrvYdmqVXEWlAJg3fG8rDnZn9ULSkA/view?usp=drive_link'},
+];
+
+localStorage.removeItem('rg_certs');let certs=JSON.parse(localStorage.getItem('rg_certs')||'null');
+if(!certs){certs=[...DEFAULT_CERTS];localStorage.setItem('rg_certs',JSON.stringify(certs));}
+
+function renderCerts(){
+  const grid=document.getElementById('cert-grid');
+  const count=document.getElementById('cert-count');
+  count.textContent=certs.length+' CERTIFICATE'+(certs.length!==1?'S':'')+' EARNED';
+  grid.innerHTML=certs.map((c,i)=>`
+    <div class="cert-card reveal">
+      <div class="cert-top">
+        <span class="cert-issuer-badge ${c.badge==='NPTEL ELITE'?'cert-elite':''}">${c.badge}</span>
+        ${c.badge==='NPTEL ELITE'?'<span style="font-family:\'Share Tech Mono\',monospace;font-size:0.58rem;color:gold;letter-spacing:0.1em;">★ ELITE</span>':''}
+      </div>
+      <div class="cert-title">${c.title}</div>
+      <div class="cert-org">${c.org}</div>
+      <div class="cert-meta">
+        <span class="cert-date">${c.date}</span>
+        <span class="cert-score">${c.score}</span>
+      </div>
+      <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.8rem;flex-wrap:wrap;">
+        ${c.url?`<button class="cert-view-btn" onclick="viewCert('${c.url}','${c.title}')">VIEW ↗</button>`:''}
+        <button class="cert-view-btn" onclick="deleteCert(${i})" style="border-color:rgba(255,80,80,0.3);color:rgba(255,80,80,0.6);">REMOVE</button>
+      </div>
+    </div>
+  `).join('');
+  grid.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+
+function viewCert(url,title){
+  // Open Google Drive link directly in new tab — Drive PDFs don't allow iframe embedding
+  window.open(url,'_blank');
+}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');document.getElementById('lb-frame').src='';}
+function openCertModal(){document.getElementById('cert-modal').classList.add('open');}
+function closeCertModal(){document.getElementById('cert-modal').classList.remove('open');}
+function saveCert(){
+  const t=document.getElementById('cm-title').value.trim();
+  const o=document.getElementById('cm-org').value.trim();
+  if(!t||!o){alert('Please fill Title and Organization!');return;}
+  certs.unshift({title:t,org:o,date:document.getElementById('cm-date').value,score:document.getElementById('cm-score').value||'Completed',badge:document.getElementById('cm-badge').value,url:document.getElementById('cm-url').value});
+  localStorage.setItem('rg_certs',JSON.stringify(certs));
+  renderCerts();closeCertModal();
+  ['cm-title','cm-org','cm-date','cm-score','cm-url'].forEach(id=>document.getElementById(id).value='');
+}
+function deleteCert(i){if(confirm('Remove this certificate?')){certs.splice(i,1);localStorage.setItem('rg_certs',JSON.stringify(certs));renderCerts();}}
+renderCerts();
+
+// ── PROJECTS ─────────────────────────────────────────────────
+const DEFAULT_PROJECTS=[
+  {title:'Fake News Detection System',desc:'Developed an ML model to identify fake news articles using text classification & NLP preprocessing. Processes news content to predict authenticity with high accuracy.',tech:['Python','Scikit-learn','NLP','Pandas','ML'],status:'COMPLETED',url:'https://github.com/rajashri8259/Fake-News-Detection'},
+];
+let projects=JSON.parse(localStorage.getItem('rg_projects')||'null');
+if(!projects){projects=[...DEFAULT_PROJECTS];localStorage.setItem('rg_projects',JSON.stringify(projects));}
+
+function renderProjects(){
+  const grid=document.getElementById('proj-grid');
+  const count=document.getElementById('proj-count');
+  count.textContent=projects.length+' PROJECT'+(projects.length!==1?'S':'');
+  grid.innerHTML=projects.map((p,i)=>`
+    <div class="proj-card reveal">
+      <div class="proj-num">0${i+1}</div>
+      <div class="proj-title">${p.title}</div>
+      <p class="proj-desc">${p.desc}</p>
+      <div class="proj-tech">${p.tech.map(t=>`<span class="tech-badge">${t}</span>`).join('')}</div>
+      <div class="proj-status" style="margin-bottom:1rem;"><span class="dot" style="${p.status==='IN PROGRESS'?'background:var(--cyan);':''}"></span>${p.status}</div>
+      <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+        ${p.url?`<a href="${p.url}" target="_blank" class="cert-view-btn" style="text-decoration:none;">⎋ OPEN IN GITHUB</a>`:''}
+        <button class="cert-view-btn" onclick="deleteProject(${i})" style="border-color:rgba(255,80,80,0.3);color:rgba(255,80,80,0.6);">REMOVE</button>
+      </div>
+    </div>`).join('');
+  grid.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+}
+function openProjModal(){document.getElementById('proj-modal').classList.add('open');}
+function closeProjModal(){document.getElementById('proj-modal').classList.remove('open');}
+function saveProject(){
+  const t=document.getElementById('pm-title').value.trim();
+  const d=document.getElementById('pm-desc').value.trim();
+  if(!t||!d){alert('Please fill Title and Description!');return;}
+  const tech=document.getElementById('pm-tech').value.split(',').map(x=>x.trim()).filter(Boolean);
+  projects.push({title:t,desc:d,tech,status:document.getElementById('pm-status').value,url:document.getElementById('pm-url').value.trim()});
+  localStorage.setItem('rg_projects',JSON.stringify(projects));
+  renderProjects();closeProjModal();
+  ['pm-title','pm-desc','pm-tech','pm-url'].forEach(id=>document.getElementById(id).value='');
+}
+function deleteProject(i){if(confirm('Remove this project?')){projects.splice(i,1);localStorage.setItem('rg_projects',JSON.stringify(projects));renderProjects();}}
+renderProjects();
+// close proj modal on overlay
+document.getElementById('proj-modal').addEventListener('click',function(e){if(e.target===this)closeProjModal();});
+
+// ── INTERNSHIP LOG ───────────────────────────────────────────
+let logs=JSON.parse(localStorage.getItem('rg_logs')||'null');
+if(!logs){
+  logs=[{date:'2025-05-22',title:'Day 1 — GitHub Basics & Portfolio Setup',content:'• Learned the basics of GitHub: repositories, commits, branches\n• Understood how GitHub Pages works for hosting static websites\n• Created personal portfolio website using HTML, CSS, JavaScript\n• Hosted the portfolio on GitHub Pages\n• Explored the importance of a technical portfolio for career development',tags:['GitHub','HTML','CSS','Portfolio','GitHub Pages']}];
+  localStorage.setItem('rg_logs',JSON.stringify(logs));
+}
+
+function saveLogs(){localStorage.setItem('rg_logs',JSON.stringify(logs));}
+
+function renderLogs(){
+  const sidebar=document.getElementById('log-sidebar');
+  const entries=document.getElementById('log-entries');
+  if(logs.length===0){
+    sidebar.innerHTML='';
+    entries.innerHTML='<div class="log-empty">No entries yet. Click "+ ADD TODAY\'S LOG" to start!</div>';
+    return;
+  }
+  // Sort ascending: Day 1 first, Day 2 next, etc.
+  const sorted=[...logs].sort((a,b)=>new Date(a.date)-new Date(b.date));
+
+  // Sidebar: show only "Day 1", "Day 2" short labels
+  sidebar.innerHTML=sorted.map((l,i)=>{
+    const m=l.title.match(/Day\s*(\d+)/i);
+    const label=m?'Day '+m[1]:'Entry '+(i+1);
+    return `<button class="day-btn" onclick="showLog(${i})" title="${l.title}">
+      <span>${label}</span>
+      <span class="day-status-dot"></span>
+    </button>`;
+  }).join('');
+
+  // Entries panel: full detail
+  entries.innerHTML=sorted.map((l,i)=>`
+    <div class="log-entry" id="log-${i}">
+      <div class="log-date">${l.date}</div>
+      <div class="log-title">${l.title}</div>
+      <div class="log-body">${l.content}</div>
+      <div class="log-tag-row">${l.tags.map(t=>`<span class="log-tag">${t.trim()}</span>`).join('')}</div>
+      <button class="log-del" onclick="deleteLogEntry(${i})">✕ DELETE ENTRY</button>
+    </div>`).join('');
+}
+
+function showLog(i){
+  document.querySelectorAll('.log-entry').forEach((e,idx)=>e.classList.toggle('active',idx===i));
+  document.querySelectorAll('.day-btn').forEach((b,idx)=>b.classList.toggle('active',idx===i));
+}
+function toggleLogForm(){
+  const f=document.getElementById('log-form');
+  f.classList.toggle('open');
+  if(f.classList.contains('open')){
+    document.getElementById('f-date').value=new Date().toISOString().split('T')[0];
+    document.getElementById('f-title').value='Day '+(logs.length+1)+' — ';
+  }
+}
+function saveLog(){
+  const date=document.getElementById('f-date').value;
+  const title=document.getElementById('f-title').value.trim();
+  const content=document.getElementById('f-content').value.trim();
+  const tags=document.getElementById('f-tags').value.split(',').filter(t=>t.trim());
+  if(!title||!content){alert('Please fill title and content!');return;}
+  logs.push({date,title,content,tags});
+  saveLogs();renderLogs();toggleLogForm();
+  document.getElementById('f-title').value='';document.getElementById('f-content').value='';document.getElementById('f-tags').value='';
+}
+function deleteLogEntry(sortedIdx){
+  if(!confirm('Delete this entry?'))return;
+  // Re-sort to find actual index in logs array
+  const sorted=[...logs].sort((a,b)=>new Date(a.date)-new Date(b.date));
+  const target=sorted[sortedIdx];
+  const realIdx=logs.findIndex(l=>l.date===target.date&&l.title===target.title);
+  if(realIdx>-1){logs.splice(realIdx,1);saveLogs();renderLogs();}
+}
+renderLogs();
+
+// close lightbox on overlay click
+document.getElementById('lightbox').addEventListener('click',function(e){if(e.target===this)closeLightbox();});
+document.getElementById('cert-modal').addEventListener('click',function(e){if(e.target===this)closeCertModal();});
+</script>
+</body>
+</html>
